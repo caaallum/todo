@@ -2,8 +2,43 @@
 #include <check.h>
 #include "../todo_group_list.h"
 
+const char *xml = \
+"<group_list>" \
+    "<group>"
+        "<name>Group 1</name>" \
+        "<items>" \
+            "<item>" \
+                "<name>Group 1 Item 1</name>" \
+                "<description>Group 1 Item 1 description</description>" \
+                "<notes>Group 1 Item 1 Notes</notes>" \
+                "<due>1</due>" \
+                "<created>2</created>" \
+            "</item>" \
+            "<item>" \
+                "<name>Group 1 Item 2</name>" \
+                "<description>Group 1 Item 2 description</description>" \
+                "<notes>Group 1 Item 2 Notes</notes>" \
+                "<due>2</due>" \
+                "<created>1</created>" \
+            "</item>" \
+        "</items>" \
+    "</group>" \
+    "<group>" \
+        "<name>Group 2</name>" \
+        "<items>" \
+            "<item>" \
+                "<name>Group 2 Item 1</name>" \
+                "<description>Group 2 Item 1 description</description>" \
+                "<notes>Group 2 Item 1 Notes</notes>" \
+                "<due>3</due>" \
+                "<created>4</created>" \
+            "</item>" \
+        "</items>" \
+    "</group>" \
+"</group_list>";
+
 START_TEST(test_load_all) {
-    ptodo_group_list_t group_list = todo_group_list_load_all();
+    ptodo_group_list_t group_list = todo_group_list_load_all(xml);
     ck_assert_ptr_nonnull(group_list);
     
     size_t total = todo_group_list_get_total(group_list);

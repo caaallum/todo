@@ -3,6 +3,7 @@
 #include <stdlib.h> /* malloc, realloc */
 #include <assert.h> /* assert */
 #include <stdio.h> /* printf */
+#include <string.h> /* strlen */
 
 #include <libxml/parser.h>
 #include <libxml/tree.h>
@@ -19,14 +20,18 @@ struct _todo_group_list_t {
 
 
 ptodo_group_list_t
-todo_group_list_load_all(void) {
-    static char filename[] = "load_all.xml";
+todo_group_list_load_all(const char *const xml) {
     ptodo_group_list_t group_list = todo_group_list_new();
     
     xmlDocPtr doc = NULL;
     xmlNodePtr root_element = NULL, child_element = NULL, cur_node = NULL;
 
-    doc = xmlReadFile(filename, NULL, 0);
+    if (xml) {
+        doc = xmlParseMemory(xml, strlen(xml));
+    } else {
+        //doc = xmlReadFile(filename, NULL, 0);
+    }
+    
     if (doc == NULL) {
         return group_list;
     }

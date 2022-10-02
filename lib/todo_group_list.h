@@ -10,7 +10,7 @@ typedef struct _todo_group_list_t todo_group_list_t, *ptodo_group_list_t;
  * 
  * \return populated group_list
  */
-ptodo_group_list_t todo_group_list_load_all(void);
+ptodo_group_list_t todo_group_list_load_all(const char *const xml);
 
 /**
  * Init group list
