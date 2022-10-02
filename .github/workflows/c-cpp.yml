@@ -13,6 +13,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Deps
+      run: sudo apt update; sudo apt install -y libxml2-dev check
     - name: autogen
       run: ./autogen.sh
     - name: configure
