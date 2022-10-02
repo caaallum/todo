@@ -1,0 +1,21 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+  
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Deps
+      run: sudo apt update; sudo apt install -y libxml2-dev check
+    - name: lib
+      run: make -C lib
+    - name: test lib
+      run: make -C lib test
