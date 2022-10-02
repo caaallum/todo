@@ -6,6 +6,13 @@
 typedef struct _todo_group_list_t todo_group_list_t, *ptodo_group_list_t;
 
 /**
+ * Load groups from database
+ * 
+ * \return populated group_list
+ */
+ptodo_group_list_t todo_group_list_load_all(void);
+
+/**
  * Init group list
  * 
  * \return newly created group list

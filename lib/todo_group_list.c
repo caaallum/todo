@@ -2,6 +2,10 @@
 
 #include <stdlib.h> /* malloc, realloc */
 #include <assert.h> /* assert */
+#include <stdio.h> /* printf */
+
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 
 #define TODO_GROUP_LIST_ITEMS_INIT_SIZE 4
 
@@ -11,6 +15,51 @@ struct _todo_group_list_t {
     size_t total;
     size_t capacity;
 };
+
+
+
+ptodo_group_list_t
+todo_group_list_load_all(void) {
+    static char filename[] = "load_all.xml";
+    ptodo_group_list_t group_list = todo_group_list_new();
+    
+    xmlDocPtr doc = NULL;
+    xmlNodePtr root_element = NULL, child_element = NULL, cur_node = NULL;
+
+    doc = xmlReadFile(filename, NULL, 0);
+    if (doc == NULL) {
+        return group_list;
+    }
+
+    root_element = xmlDocGetRootElement(doc);
+    child_element = root_element->children;
+    for (cur_node = child_element; cur_node; cur_node = cur_node->next) {
+        if (xmlStrcmp(cur_node->name, BAD_CAST "group") == 0) {
+            ptodo_group_t group = todo_group_new();
+
+            xmlNodePtr group_element = NULL, group_current = NULL;
+
+            group_element = cur_node->children;
+            for (group_current = group_element; group_current; group_current = group_current->next) {
+                if (xmlStrcmp(group_current->name, BAD_CAST "name") == 0) {
+                    xmlChar *name = xmlNodeGetContent(group_current);
+                    todo_group_set_name(group, (const char *) name);
+                    xmlFree(name);
+                }
+                if (xmlStrcmp(group_current->name, BAD_CAST "items") == 0) {
+                    
+                }
+            }
+
+            todo_group_list_add(group_list, group);
+        }
+
+    }
+
+    xmlFreeDoc(doc);
+
+    return group_list;
+}
 
 ptodo_group_list_t
 todo_group_list_new(void) {

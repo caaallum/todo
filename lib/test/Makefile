@@ -3,7 +3,7 @@ include ../../Makefile.am
 CCFLAGS+=$(shell pkg-config --cflags check)
 LDFLAGS=$(shell pkg-config --libs check) ../todo_lib.so
 
-TESTS=test_item test_group test_group_list
+TESTS=test_item test_group test_group_list test_load
 
 BIN=$(addsuffix .test, $(TESTS))
  
