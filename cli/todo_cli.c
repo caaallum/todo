@@ -1,5 +1,6 @@
 #include <glib.h>
-#include "todo_mongo.h"
+#include "../config.h"
+#include <stdio.h>
 
 int main(int argc, char **argv) {
     static gboolean display_version = FALSE;
@@ -9,7 +10,7 @@ int main(int argc, char **argv) {
     static GOptionEntry entries[] = {
         { "version", 'V', 0, G_OPTION_ARG_NONE, &display_version,
           "Display version information", NULL },
-        { "command", 0, 0, G_OPTION_FLAG_NO_ARG, &command,
+        { "command", 0, 0, G_OPTION_ARG_NONE, &command,
           "Command to run", NULL },
 
         { NULL, 0, 0, 0, NULL, NULL, NULL }
@@ -28,5 +29,6 @@ int main(int argc, char **argv) {
         printf("todo_cli %s\n", VERSION);
         return EXIT_SUCCESS;
     }
-    return todo_mongo_init("", "", "");
+
+    return 0;
 }
