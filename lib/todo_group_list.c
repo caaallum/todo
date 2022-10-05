@@ -17,8 +17,6 @@ struct _todo_group_list_t {
     size_t capacity;
 };
 
-
-
 ptodo_group_list_t
 todo_group_list_load_all(const char *const xml) {
     ptodo_group_list_t group_list = todo_group_list_new();
@@ -52,7 +50,36 @@ todo_group_list_load_all(const char *const xml) {
                     xmlFree(name);
                 }
                 if (xmlStrcmp(group_current->name, BAD_CAST "items") == 0) {
-                    
+                    xmlNodePtr items_element = NULL, items_current = NULL;
+                    items_element = group_current->children;
+                    for (items_current = items_element; items_current; items_current = items_current->next) {
+                        if (xmlStrcmp(items_current->name, BAD_CAST "item") == 0) {
+                            xmlNodePtr item_elements = NULL, item_current = NULL;
+                            item_elements = items_current->children;
+                            ptodo_item_t item = todo_item_new();
+                            for (item_current = item_elements; item_current; item_current = item_current->next) {
+                                xmlChar *data = xmlNodeGetContent(item_current);
+
+                                if (xmlStrcmp(item_current->name, BAD_CAST "name") == 0) {
+                                    todo_item_set_name(item, data);
+                                }
+                                if (xmlStrcmp(item_current->name, BAD_CAST "description") == 0) {
+                                    todo_item_set_description(item, data);
+                                }
+                                if (xmlStrcmp(item_current->name, BAD_CAST "notes") == 0) {
+                                    todo_item_set_notes(item, data);
+                                }
+                                if (xmlStrcmp(item_current->name, BAD_CAST "due") == 0) {
+                                    todo_item_set_due(item, strtol(data, (char **) NULL, 10));
+                                }
+                                if (xmlStrcmp(item_current->name, BAD_CAST "created") == 0) {
+                                    todo_item_set_created(item, strtol(data, (char **) NULL, 10));
+                                }
+                                xmlFree(data);
+                            }
+                            todo_group_add(group, item);
+                        }
+                    }
                 }
             }
 

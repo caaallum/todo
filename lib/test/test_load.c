@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <check.h>
 #include "../todo_group_list.h"
+#include <stdio.h>
 
 const char *xml = \
 "<group_list>" \
@@ -44,24 +45,50 @@ START_TEST(test_load_all) {
     size_t total = todo_group_list_get_total(group_list);
 
     ck_assert_int_eq(total, 2);
-
-    for (size_t i = 0; i < total; i++) {
-        ptodo_group_t group = todo_group_list_get(group_list, i);
     
-        ck_assert_ptr_nonnull(group);
+    /* Check group1 in parsed group list */
+    ptodo_group_t group1 = todo_group_list_get(group_list, 0);
+    ck_assert_ptr_nonnull(group1);
 
-        const char *name = todo_group_get_name(group);
+    ck_assert_str_eq(todo_group_get_name(group1), "Group 1");
+    ck_assert_int_eq(todo_group_get_total(group1), 2);
 
-        switch (i) {
-            case 0:
-                ck_assert_str_eq(name, "Group 1");
-                break;
-            case 1:
-                ck_assert_str_eq(name, "Group 2");
-                break;
-        }
-    }
+    ptodo_item_t group1_item1 = todo_group_get(group1, 0);
+    ck_assert_ptr_nonnull(group1_item1);
 
+    ck_assert_str_eq(todo_item_get_name(group1_item1), "Group 1 Item 1");
+    ck_assert_str_eq(todo_item_get_description(group1_item1), "Group 1 Item 1 description");
+    ck_assert_str_eq(todo_item_get_notes(group1_item1), "Group 1 Item 1 Notes");
+    ck_assert_int_eq(todo_item_get_due(group1_item1), 1);
+    ck_assert_int_eq(todo_item_get_created(group1_item1), 2);
+
+    ptodo_item_t group1_item2 = todo_group_get(group1, 1);
+    ck_assert_ptr_nonnull(group1_item2);
+
+    ck_assert_str_eq(todo_item_get_name(group1_item2), "Group 1 Item 2");
+    ck_assert_str_eq(todo_item_get_description(group1_item2), "Group 1 Item 2 description");
+    ck_assert_str_eq(todo_item_get_notes(group1_item2), "Group 1 Item 2 Notes");
+    ck_assert_int_eq(todo_item_get_due(group1_item2), 2);
+    ck_assert_int_eq(todo_item_get_created(group1_item2), 1);
+
+    /* Check group2 in parsed group list */
+    ptodo_group_t group2 = todo_group_list_get(group_list, 1);
+    ck_assert_ptr_nonnull(group2);
+
+    ck_assert_str_eq(todo_group_get_name(group2), "Group 2");
+
+    ck_assert_int_eq(todo_group_get_total(group2), 1);
+
+    ptodo_item_t group2_item1 = todo_group_get(group2, 0);
+    ck_assert_ptr_nonnull(group2_item1);
+
+    ck_assert_str_eq(todo_item_get_name(group2_item1), "Group 2 Item 1");
+    ck_assert_str_eq(todo_item_get_description(group2_item1), "Group 2 Item 1 description");
+    ck_assert_str_eq(todo_item_get_notes(group2_item1), "Group 2 Item 1 Notes");
+    ck_assert_int_eq(todo_item_get_due(group2_item1), 3);
+    ck_assert_int_eq(todo_item_get_created(group2_item1), 4);
+
+    todo_group_list_free(group_list);
 }
 END_TEST
 
