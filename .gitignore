@@ -23,12 +23,12 @@ autom4te.cache
 /config.status
 /config.sub
 /configure
-/configure~
 /configure.scan
 /depcomp
 /install-sh
 /missing
 /stamp-h1
+.libs/
 
 # https://www.gnu.org/software/libtool/
 
@@ -56,3 +56,8 @@ config/
 config.h
 libtool
 todo-*
+*.o
+todo_cli
+*.lo
+*.la
+*~
