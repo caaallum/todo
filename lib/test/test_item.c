@@ -1,37 +1,37 @@
-#include <stdlib.h>
-#include <check.h>
 #include "../todo_item.h"
+#include <check.h>
+#include <stdlib.h>
 
 START_TEST(test_item_init) {
-    ptodo_item_t item = todo_item_new();
+    todo_item_t *item = todo_item_new();
 
     ck_assert_ptr_nonnull(item);
-    ck_assert_ptr_null(todo_item_get_name(item));
-    ck_assert_ptr_null(todo_item_get_description(item));
-    ck_assert_ptr_null(todo_item_get_notes(item));
+    ck_assert_ptr_null(item->name);
+    ck_assert_ptr_null(item->description);
+    ck_assert_ptr_null(item->notes);
 
-    ck_assert_uint_eq(todo_item_get_due(item), 0);
-    ck_assert_uint_eq(todo_item_get_created(item), 0);
+    ck_assert_uint_eq(item->due, 0);
+    ck_assert_uint_eq(item->created, 0);
 
     todo_item_free(item);
 }
 END_TEST
 
 START_TEST(test_item_build) {
-    static char name[] = "Item Name";
-    static char description[] = "Item Description";
-    static char notes[] = "Item Notes";
-    static unsigned long due = 1;
+    static char name[]           = "Item Name";
+    static char description[]    = "Item Description";
+    static char notes[]          = "Item Notes";
+    static unsigned long due     = 1;
     static unsigned long created = 2;
 
-    ptodo_item_t item = todo_item_build(name, description, notes, due, created);
+    todo_item_t *item = todo_item_build(name, description, notes, due, created);
 
     ck_assert_ptr_nonnull(item);
-    ck_assert_str_eq(todo_item_get_name(item), name);
-    ck_assert_str_eq(todo_item_get_description(item), description);
-    ck_assert_str_eq(todo_item_get_notes(item), notes);
-    ck_assert_uint_eq(todo_item_get_due(item), due);
-    ck_assert_uint_eq(todo_item_get_created(item), created);
+    ck_assert_str_eq(item->name, name);
+    ck_assert_str_eq(item->description, description);
+    ck_assert_str_eq(item->notes, notes);
+    ck_assert_uint_eq(item->due, due);
+    ck_assert_uint_eq(item->created, created);
 
     todo_item_free(item);
 }
@@ -40,11 +40,11 @@ END_TEST
 START_TEST(test_item_set_name) {
     static char name[] = "Item name";
 
-    ptodo_item_t item = todo_item_new();
+    todo_item_t *item = todo_item_new();
 
     todo_item_set_name(item, name);
 
-    ck_assert_str_eq(todo_item_get_name(item), name);
+    ck_assert_str_eq(item->name, name);
 
     todo_item_free(item);
 }
@@ -53,11 +53,11 @@ END_TEST
 START_TEST(test_item_set_description) {
     static char description[] = "Item description";
 
-    ptodo_item_t item = todo_item_new();
+    todo_item_t *item = todo_item_new();
 
     todo_item_set_description(item, description);
 
-    ck_assert_str_eq(todo_item_get_description(item), description);
+    ck_assert_str_eq(item->description, description);
 
     todo_item_free(item);
 }
@@ -66,11 +66,11 @@ END_TEST
 START_TEST(test_item_set_notes) {
     static char notes[] = "Item notes";
 
-    ptodo_item_t item = todo_item_new();
+    todo_item_t *item = todo_item_new();
 
     todo_item_set_notes(item, notes);
 
-    ck_assert_str_eq(todo_item_get_notes(item), notes);
+    ck_assert_str_eq(item->notes, notes);
 
     todo_item_free(item);
 }
@@ -79,11 +79,11 @@ END_TEST
 START_TEST(test_item_set_due) {
     static unsigned long due = 123456;
 
-    ptodo_item_t item = todo_item_new();
+    todo_item_t *item = todo_item_new();
 
-    todo_item_set_due(item, due);
+    item->due = due;
 
-    ck_assert_uint_eq(todo_item_get_due(item), due);
+    ck_assert_uint_eq(item->due, due);
 
     todo_item_free(item);
 }
@@ -92,16 +92,17 @@ END_TEST
 START_TEST(test_item_set_created) {
     static unsigned long created = 123456;
 
-    ptodo_item_t item = todo_item_new();
+    todo_item_t *item = todo_item_new();
 
-    todo_item_set_created(item, created);
+    item->created = created;
 
-    ck_assert_uint_eq(todo_item_get_created(item), created);
+    ck_assert_uint_eq(item->created, created);
 
     todo_item_free(item);
 }
 
-Suite *item_suite(void) {
+Suite *
+item_suite(void) {
     Suite *s;
     TCase *tc_core, *tc_data;
 
@@ -126,12 +127,13 @@ Suite *item_suite(void) {
     return s;
 }
 
-int main(void) {
+int
+main(void) {
     int number_failed;
     Suite *s;
     SRunner *sr;
 
-    s = item_suite();
+    s  = item_suite();
     sr = srunner_create(s);
 
     srunner_run_all(sr, CK_NORMAL);

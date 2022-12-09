@@ -10,7 +10,6 @@ LT_INIT
 
 PKG_CHECK_MODULES([XML], [libxml-2.0])
 PKG_CHECK_MODULES([CHECK], [check])
-PKG_CHECK_MODULES([GLIB], [glib-2.0])
 
 AC_ARG_ENABLE(debug,
     AS_HELP_STRING([--enable-debug], [Use debug configuration and output settings]),

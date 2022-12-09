@@ -1,12 +1,12 @@
-#include <stdlib.h>
-#include <check.h>
 #include "../todo_group.h"
+#include <check.h>
+#include <stdlib.h>
 
 START_TEST(test_group_init) {
-    ptodo_group_t group = todo_group_new();
+    todo_group_t *group = todo_group_new();
 
     ck_assert_ptr_nonnull(group);
-    ck_assert_ptr_null(todo_group_get_name(group));
+    ck_assert_ptr_null(group->name);
     ck_assert_int_eq(todo_group_get_total(group), 0);
 
     todo_group_free(group);
@@ -16,10 +16,10 @@ END_TEST
 START_TEST(test_group_build) {
     static char name[] = "Group Name";
 
-    ptodo_group_t group = todo_group_build(name);
+    todo_group_t *group = todo_group_build(name);
 
     ck_assert_ptr_nonnull(group);
-    ck_assert_str_eq(todo_group_get_name(group), name);
+    ck_assert_str_eq(group->name, name);
     ck_assert_int_eq(todo_group_get_total(group), 0);
 
     todo_group_free(group);
@@ -27,10 +27,10 @@ START_TEST(test_group_build) {
 END_TEST
 
 START_TEST(test_group_add) {
-    ptodo_group_t group = todo_group_new();
+    todo_group_t *group = todo_group_new();
 
-    ptodo_item_t item = todo_item_new();
-    ptodo_item_t item2 = todo_item_new();
+    todo_item_t *item  = todo_item_new();
+    todo_item_t *item2 = todo_item_new();
 
     todo_group_add(group, item);
     ck_assert_int_eq(todo_group_get_total(group), 1);
@@ -45,12 +45,12 @@ START_TEST(test_group_add) {
 END_TEST
 
 START_TEST(test_group_set) {
-    ptodo_group_t group = todo_group_new();
+    todo_group_t *group = todo_group_new();
 
-    ptodo_item_t item = todo_item_new();
-    ptodo_item_t item2 = todo_item_new();
-    ptodo_item_t item3 = todo_item_new();
-    ptodo_item_t item4 = todo_item_new();
+    todo_item_t *item  = todo_item_new();
+    todo_item_t *item2 = todo_item_new();
+    todo_item_t *item3 = todo_item_new();
+    todo_item_t *item4 = todo_item_new();
 
     todo_group_add(group, item);
     ck_assert_int_eq(todo_group_get_total(group), 1);
@@ -69,10 +69,10 @@ START_TEST(test_group_set) {
 END_TEST
 
 START_TEST(test_group_delete) {
-    ptodo_group_t group = todo_group_new();
+    todo_group_t *group = todo_group_new();
 
-    ptodo_item_t item = todo_item_new();
-    ptodo_item_t item2 = todo_item_new();
+    todo_item_t *item  = todo_item_new();
+    todo_item_t *item2 = todo_item_new();
 
     todo_group_add(group, item);
     todo_group_add(group, item2);
@@ -89,7 +89,8 @@ START_TEST(test_group_delete) {
 }
 END_TEST
 
-Suite *group_suite(void) {
+Suite *
+group_suite(void) {
     Suite *s;
     TCase *tc_core, *tc_data;
 
@@ -112,12 +113,13 @@ Suite *group_suite(void) {
     return s;
 }
 
-int main(void) {
+int
+main(void) {
     int number_failed;
     Suite *s;
     SRunner *sr;
 
-    s = group_suite();
+    s  = group_suite();
     sr = srunner_create(s);
 
     srunner_run_all(sr, CK_NORMAL);

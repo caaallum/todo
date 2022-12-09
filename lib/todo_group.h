@@ -5,21 +5,27 @@
 
 #include "todo_item.h"
 
-typedef struct _todo_group_t todo_group_t, *ptodo_group_t;
+typedef struct {
+    char *name;
+    todo_item_t **items;
+
+    size_t total;
+    size_t capacity;
+} todo_group_t;
 
 /**
  * Create new group
  *
  * \return newly created group
  */
-ptodo_group_t todo_group_new(void);
+todo_group_t *todo_group_new(void);
 
 /**
  * Build group from existing data
  *
  * \return newly created group
  */
-ptodo_group_t todo_group_build(const char *const name);
+todo_group_t *todo_group_build(const char *const name);
 
 /**
  * Set name of todo group
@@ -27,7 +33,7 @@ ptodo_group_t todo_group_build(const char *const name);
  * \param group group to set
  * \param name to set
  */
-void todo_group_set_name(ptodo_group_t group, const char *const name);
+void todo_group_set_name(todo_group_t *group, const char *const name);
 
 /**
  * Get number of items in group
@@ -36,16 +42,7 @@ void todo_group_set_name(ptodo_group_t group, const char *const name);
  * 
  * \return size_t
  */
-size_t todo_group_get_total(ptodo_group_t group);
-
-/**
- * Get name of todo group
- *
- * \param group
- * 
- * \return name
- */
-const char *todo_group_get_name(ptodo_group_t group);
+size_t todo_group_get_total(todo_group_t *group);
 
 /**
  * Add item to group
@@ -53,7 +50,7 @@ const char *todo_group_get_name(ptodo_group_t group);
  * \param group
  * \param item
  */
-void todo_group_add(ptodo_group_t group, ptodo_item_t item);
+void todo_group_add(todo_group_t *group, todo_item_t *item);
 
 /**
  * Set item in group
@@ -62,7 +59,7 @@ void todo_group_add(ptodo_group_t group, ptodo_item_t item);
  * \param index
  * \param item
  */
-void todo_group_set(ptodo_group_t group, size_t index, ptodo_item_t item);
+void todo_group_set(todo_group_t *group, size_t index, todo_item_t *item);
 
 /**
  * Get item from group
@@ -70,7 +67,7 @@ void todo_group_set(ptodo_group_t group, size_t index, ptodo_item_t item);
  * \param group
  * \param index
  */
-ptodo_item_t todo_group_get(ptodo_group_t group, size_t index);
+todo_item_t *todo_group_get(todo_group_t *group, size_t index);
 
 /**
  * Delete item from group
@@ -78,13 +75,13 @@ ptodo_item_t todo_group_get(ptodo_group_t group, size_t index);
  * \param group
  * \param index
  */
-void todo_group_delete(ptodo_group_t group, size_t index);
+void todo_group_delete(todo_group_t *group, size_t index);
 
 /**
  * Free group
  * 
  * \param group
  */
-void todo_group_free(ptodo_group_t group);
+void todo_group_free(todo_group_t *group);
 
-#endif/* __LIB_TODO_GROUP_H */
+#endif /* __LIB_TODO_GROUP_H */

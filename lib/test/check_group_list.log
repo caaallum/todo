@@ -1,0 +1,3 @@
+Running suite(s): Group List
+100%: Checks: 5, Failures: 0, Errors: 0
+PASS check_group_list (exit status: 0)
