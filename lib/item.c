@@ -118,7 +118,7 @@ item_build(const char *name, const char *description, const char *notes, unsigne
 
 int
 item_save(item_t *item) {
-    static char item_save_format[] = "INSERT INTO item(name, description, notes, due, created, groupid) VALUES('%s', '%s', '%s', %ld, %ld, %d);";
+    static char item_save_format[] = "INSERT INTO todo_item(name, description, notes, due, created, groupid) VALUES('%s', '%s', '%s', %ld, %ld, %d);";
     char *sql = NULL;
     char *err_msg;
     int rc;
@@ -180,7 +180,7 @@ int _item_load(void *udp, int c_num, char **c_vals, char **c_names) {
 
 item_list_t *
 item_load(void) {
-    static char sql[] = "SELECT * FROM item;";
+    static char sql[] = "SELECT * FROM todo_item;";
     int rc;
     char *err_msg;
     item_list_t *list = item_list_init();
@@ -202,7 +202,7 @@ item_load_one(unsigned int id) {
     item_list_t *list = item_list_init();
     item_t *item = NULL;
 
-    asprintf(&sql, "SELECT * FROM item WHERE id = %d", id);
+    asprintf(&sql, "SELECT * FROM todo_item WHERE id = %d", id);
     assert(sql);
 
     rc = sqlite3_exec(todo_db, sql, _item_load, list, &err_msg);
