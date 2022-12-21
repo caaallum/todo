@@ -1,5 +1,10 @@
 lib_LTLIBRARIES = libtodo.la
-libtodo_la_SOURCES = todo_group_list.c todo_group.c todo_item.c
+libtodo_la_SOURCES = todo.h todo.c \
+                     item.h item.c \
+                     group.h group.c \
+                     str.h str.c \
+                     mem.h mem.c \
+                     db.h db.c
 
-libtodo_la_CFLAGS = @XML_CFLAGS@
-libtodo_la_LIBADD = @XML_LIBS@
+libtodo_la_CFLAGS = @SQLITE_CFLAGS@
+libtodo_la_LIBADD = @SQLITE_LIBS@

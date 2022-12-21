@@ -52,12 +52,14 @@ m4/lt~obsolete.m4
 # (which is called by configure script))
 Makefile
 
-config/
-config.h
-libtool
-todo-*
+compile_commands.json
+/.cache/
+/.fleet/
 *.o
-todo_cli
+libtools
 *.lo
+libtool
+.libs/
+*.log
+*.trs
 *.la
-*~
