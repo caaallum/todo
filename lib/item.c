@@ -103,6 +103,19 @@ item_new(void) {
     return item;
 }
 
+item_t *
+item_build(const char *name, const char *description, const char *notes, unsigned long due, unsigned long created) {
+    item_t *item = item_new();
+
+    todo_set_string(&item->name, name);
+    todo_set_string(&item->description, description);
+    todo_set_string(&item->notes, notes);
+    item->due = due;
+    item->created = created;
+
+    return item;
+}
+
 int
 item_save(item_t *item) {
     static char item_save_format[] = "INSERT INTO item(name, description, notes, due, created, groupid) VALUES('%s', '%s', '%s', %ld, %ld, %d);";
@@ -114,13 +127,13 @@ item_save(item_t *item) {
 
     assert(sql);
 
-    rc = sqlite3_exec(db, sql, 0, 0, &err_msg);
+    rc = sqlite3_exec(todo_db, sql, 0, 0, &err_msg);
     if (rc != SQLITE_OK) {
         fprintf(stderr, "Failed to save item: %s\n", err_msg);
         sqlite3_free(err_msg);
     }
 
-    item->id = sqlite3_last_insert_rowid(db);
+    item->id = sqlite3_last_insert_rowid(todo_db);
 
     free(sql);
 
@@ -138,15 +151,15 @@ int _item_load(void *udp, int c_num, char **c_vals, char **c_names) {
         }
 
         if (strcmp(c_names[i], "name") == 0) {
-            set_string(&item->name, c_vals[i]);
+            todo_set_string(&item->name, c_vals[i]);
         }
 
         if (strcmp(c_names[i], "description") == 0) {
-            set_string(&item->description, c_vals[i]);
+            todo_set_string(&item->description, c_vals[i]);
         }
 
         if (strcmp(c_names[i], "notes") == 0) {
-            set_string(&item->notes, c_vals[i]);
+            todo_set_string(&item->notes, c_vals[i]);
         }
 
         if (strcmp(c_names[i], "due") == 0) {
@@ -172,7 +185,7 @@ item_load(void) {
     char *err_msg;
     item_list_t *list = item_list_init();
 
-    rc = sqlite3_exec(db, sql, _item_load, list, &err_msg);
+    rc = sqlite3_exec(todo_db, sql, _item_load, list, &err_msg);
     if (rc != SQLITE_OK) {
         fprintf(stderr, "Failed to query item %s\n", err_msg);
         sqlite3_free(err_msg);
@@ -192,7 +205,7 @@ item_load_one(unsigned int id) {
     asprintf(&sql, "SELECT * FROM item WHERE id = %d", id);
     assert(sql);
 
-    rc = sqlite3_exec(db, sql, _item_load, list, &err_msg);
+    rc = sqlite3_exec(todo_db, sql, _item_load, list, &err_msg);
     if (rc != SQLITE_OK) {
       fprintf(stderr, "Failed to query item %s\n", err_msg);
       sqlite3_free(err_msg);

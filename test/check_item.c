@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 START_TEST(test_item_init) {
-    item_t *item = todo_item_new();
+    item_t *item = item_new();
 
     ck_assert_ptr_nonnull(item);
 
@@ -16,12 +16,12 @@ START_TEST(test_item_init) {
     ck_assert_int_eq(item->created, 0);
     ck_assert_int_eq(item->group_id, 0);
 
-    todo_item_free(item);
+    item_free(item);
 }
 END_TEST
 
 START_TEST(test_item_build) {
-    item_t *item = todo_item_build("Name", "Description", "Notes", 123456789, 987654321);
+    item_t *item = item_build("Name", "Description", "Notes", 123456789, 987654321);
 
     ck_assert_ptr_nonnull(item);
 
@@ -32,26 +32,26 @@ START_TEST(test_item_build) {
     ck_assert_int_eq(item->created, 987654321);
     ck_assert_int_eq(item->group_id, 0);
 
-    todo_item_free(item);
+    item_free(item);
 }
 END_TEST
 
 START_TEST(test_item_save) {
-    item_t *item = todo_item_build("Name", "Description", "Notes", 123456789, 987654321);
+    item_t *item = item_build("Name", "Description", "Notes", 123456789, 987654321);
 
-    todo_item_save(item);
+    item_save(item);
 
-    todo_item_free(item);
+    item_free(item);
 }
 END_TEST
 
 START_TEST(test_item_load) {
-    item_t *item1 = todo_item_build("Name1", "Description1", "Notes1", 123456789, 987654321);
-    item_t *item2 = todo_item_build("Name2", "Description2", "Notes2", 987654321, 123456789);
-    todo_item_save(item1);
-    todo_item_save(item2);
+    item_t *item1 = item_build("Name1", "Description1", "Notes1", 123456789, 987654321);
+    item_t *item2 = item_build("Name2", "Description2", "Notes2", 987654321, 123456789);
+    item_save(item1);
+    item_save(item2);
 
-    item_list_t *items = todo_item_load();
+    item_list_t *items = item_load();
 
     ck_assert_int_eq(items->items[0]->id, item1->id);
     ck_assert_str_eq(items->items[0]->name, item1->name);
@@ -74,13 +74,13 @@ START_TEST(test_item_load) {
 END_TEST
 
 START_TEST(test_item_load_one) {
-    item_t *item1 = todo_item_build("Name1", "Description1", "Notes1", 123456789, 987654321);
-    item_t *item2 = todo_item_build("Name2", "Description2", "Notes2", 987654321, 123456789);
-    todo_item_save(item1);
-    todo_item_save(item2);
+    item_t *item1 = item_build("Name1", "Description1", "Notes1", 123456789, 987654321);
+    item_t *item2 = item_build("Name2", "Description2", "Notes2", 987654321, 123456789);
+    item_save(item1);
+    item_save(item2);
 
-    item_t *item1_loaded = todo_item_load_one(1);
-    item_t *item2_loaded = todo_item_load_one(2);
+    item_t *item1_loaded = item_load_one(1);
+    item_t *item2_loaded = item_load_one(2);
 
     ck_assert_int_eq(item1_loaded->id, item1->id);
     ck_assert_str_eq(item1_loaded->name, item1->name);
@@ -98,10 +98,10 @@ START_TEST(test_item_load_one) {
     ck_assert_int_eq(item2_loaded->created, item2->created);
     ck_assert_int_eq(item2_loaded->group_id, item2->group_id);
 
-    todo_item_free(item1);
-    todo_item_free(item2);
-    todo_item_free(item1_loaded);
-    todo_item_free(item2_loaded);
+    item_free(item1);
+    item_free(item2);
+    item_free(item1_loaded);
+    item_free(item2_loaded);
 }
 END_TEST
 

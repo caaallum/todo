@@ -84,6 +84,21 @@ void item_list_free(item_list_t *list);
 item_t *item_new(void);
 
 /**
+ * Function: item_build
+ * --------------------
+ * Create a new populated item struct
+ * 
+ * \param name: 
+ * \param description:
+ * \param notes:
+ * \param due:
+ * \param created:
+ * 
+ * \returns newly created populated item struct
+ */
+item_t * item_build(const char *name, const char *description, const char *notes, unsigned long due, unsigned long created);
+
+/**
  * Function: item_load_one
  * -----------------------
  * Load single item from database by id
