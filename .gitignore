@@ -53,6 +53,7 @@ m4/lt~obsolete.m4
 # (which is called by configure script))
 Makefile
 
+config.h
 compile_commands.json
 /.cache/
 /.fleet/
@@ -65,3 +66,7 @@ libtool
 *.trs
 *.la
 todo-*
+
+test/*
+!test/*.c
+!test/*.am
