@@ -223,6 +223,30 @@ item_load_one(unsigned int id) {
     return item;
 }
 
+item_list_t *
+item_load_group(unsigned int group_id) {
+    char *sql;
+    int rc;
+    char *err_msg;
+    item_list_t *list = item_list_init();
+
+    asprintf(&sql, "SELECT * FROM todo_item WHERE groupid = %d", group_id);
+    assert(sql);
+
+    rc = sqlite3_exec(todo_db, sql, _item_load, list, &err_msg);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to query items %s\n", err_msg);
+        sqlite3_free(err_msg);
+        item_list_free(list);
+        free(sql);
+        return NULL;
+    }
+
+    free(sql);
+
+    return list;
+}
+
 void
 item_free(item_t *item) {
     free(item->name);

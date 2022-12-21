@@ -119,6 +119,17 @@ item_t *item_load_one(unsigned int id);
 item_list_t *item_load(void);
 
 /**
+ * Function: item_load_group
+ * -------------------------
+ * Load all items for specified group
+ *
+ * \param id: id of group
+ *
+ * \return list of populated items
+ */
+item_list_t *item_load_group(unsigned int group_id);
+
+/**
  * Function: item_save
  * -------------------
  * Save item into database
@@ -130,7 +141,11 @@ item_list_t *item_load(void);
 int item_save(item_t *item);
 
 /**
- * F
+ * Function: item_free
+ * -------------------
+ * Free item
+ *
+ * \param item: item to free
  */
 void item_free(item_t *item);
 

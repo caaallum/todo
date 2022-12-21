@@ -8,7 +8,6 @@ int
 todo_init(unsigned int flags) {
     int rc;
 
-
     if (flags == TODO_FLAGS_NONE) {
       rc = todo_db_init(TODO_DB_LOCATION);
     }
