@@ -2,7 +2,6 @@
 #include "db.h"
 #include <check.h>
 #include <stdlib.h>
-#include <stdio.h>
 
 START_TEST(test_item_init) {
     item_t *item = item_new();

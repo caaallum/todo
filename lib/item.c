@@ -8,7 +8,7 @@
 #include "db.h"
 
 item_list_t *
-item_list_init(void) {
+item_list_new(void) {
     item_list_t *list = malloc(sizeof(item_list_t));
     assert(list);
 
@@ -183,7 +183,7 @@ item_load(void) {
     static char sql[] = "SELECT * FROM todo_item;";
     int rc;
     char *err_msg;
-    item_list_t *list = item_list_init();
+    item_list_t *list = item_list_new();
 
     rc = sqlite3_exec(todo_db, sql, _item_load, list, &err_msg);
     if (rc != SQLITE_OK) {
@@ -199,7 +199,7 @@ item_load_one(unsigned int id) {
     char *sql;
     int rc;
     char *err_msg;
-    item_list_t *list = item_list_init();
+    item_list_t *list = item_list_new();
     item_t *item = NULL;
 
     asprintf(&sql, "SELECT * FROM todo_item WHERE id = %d", id);
@@ -228,7 +228,7 @@ item_load_group(unsigned int group_id) {
     char *sql;
     int rc;
     char *err_msg;
-    item_list_t *list = item_list_init();
+    item_list_t *list = item_list_new();
 
     asprintf(&sql, "SELECT * FROM todo_item WHERE groupid = %d", group_id);
     assert(sql);
