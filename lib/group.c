@@ -95,6 +95,16 @@ group_new(void) {
     return group;
 }
 
+int
+group_save(group_t *group) {
+    static char group_save_format[] = "INSERT INTO todo_group(name) VALUES('%s');";
+    char *sql = NULL;
+    char *err_msg;
+    int rc;
+
+    asprintf(&sql, group_save_format, group->name);
+}
+
 void
 group_free(group_t *group) {
     item_list_free_all(group->items);

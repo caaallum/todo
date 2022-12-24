@@ -29,6 +29,8 @@ void group_list_free(group_list_t *list);
 
 group_t *group_new(void);
 
+int group_save(group_t *group);
+
 void group_free(group_t *group);
 
 #endif /* __LIB_TODO_GROUP_H */

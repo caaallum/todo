@@ -52,6 +52,10 @@ START_TEST(test_item_load) {
 
     item_list_t *items = item_load();
 
+    ck_assert_ptr_nonnull(items);
+    ck_assert_ptr_nonnull(items->items[0]);
+    ck_assert_ptr_nonnull(items->items[1]);
+
     ck_assert_int_eq(items->items[0]->id, item1->id);
     ck_assert_str_eq(items->items[0]->name, item1->name);
     ck_assert_str_eq(items->items[0]->description, item1->description);

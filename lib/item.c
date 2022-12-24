@@ -116,8 +116,8 @@ item_build(const char *name, const char *description, const char *notes, unsigne
     return item;
 }
 
-int
-item_save(item_t *item) {
+int 
+_item_save(item_t *item) {
     static char item_save_format[] = "INSERT INTO todo_item(name, description, notes, due, created, groupid) VALUES('%s', '%s', '%s', %ld, %ld, %d);";
     char *sql = NULL;
     char *err_msg;
@@ -138,6 +138,37 @@ item_save(item_t *item) {
     free(sql);
 
     return rc;
+}
+
+int
+_item_update(item_t *item) {
+    static char item_insert_format[] = "UPDATE todo_item SET name = '%s', description = '%s', notes = '%s', due = %ld, created = %ld, groupid = %d WHERE id = %d;";
+    char *sql = NULL;
+    char *err_msg;
+    int rc;
+
+    asprintf(&sql, item_insert_format, item->name, item->description, item->notes, item->due, item->created, item->group_id, item->id);
+
+    assert(sql);
+
+    rc = sqlite3_exec(todo_db, sql, 0, 0, &err_msg);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to update item: %s\n", err_msg);
+        sqlite3_free(err_msg);
+    }
+
+    free(sql);
+
+    return rc;
+}
+
+int
+item_save(item_t *item) {
+    if (item->id != 0) {
+        return _item_update(item);
+    } else {
+        return _item_save(item);
+    }
 }
 
 int _item_load(void *udp, int c_num, char **c_vals, char **c_names) {
