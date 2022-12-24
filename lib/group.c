@@ -4,7 +4,7 @@
 #include "mem.h"
 
 group_list_t *
-group_list_init(void) {
+group_list_new(void) {
     group_list_t *list = malloc(sizeof(group_list_t));
     assert(list);
 
